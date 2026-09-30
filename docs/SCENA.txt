@@ -1,0 +1,36 @@
+SCENA*
+
+---
+Crud completo
+sistema de login (admin)
+protótipo de baixa fidelidade (todas a telas linkadas) - excalidraw, figma
+levantamentos de requisitos funcionais(essenciais) e não funcionais(features)
+diagramas das tabelas
+---
+
+
+
+
+
+
+
+
+
+tela1:
+nav: inicio, pesquisa, entrar
+consteudo: mostra os shows adicionados recentemente
+
+
+
+tela2:
+nav: inicio, pesquisa, entrar
+pesquisa: pesquisa por nome da cidade, artista ou gênero
+
+tela3:
+entrar:tela de login dos usuários e do admin, caso não esteja cadastrado existe um link para a pagina de cadastro
+
+tela4:
+cadastrar
+
+
+

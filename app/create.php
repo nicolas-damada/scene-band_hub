@@ -1,0 +1,56 @@
+<?php require_once '../database/conect.php'?>
+<?php require_once '../includes/functions.php'?>
+<?php 
+require_once '../login/verifica.php';
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar show</title>
+</head>
+
+<body>
+
+    <?php include '../includes/header.php'; ?>
+    <main>
+        <h1>Cadastro de Show: </h1>
+        <form action="" method="post">
+            <label for="titulo">Titulo: </label>
+            <input type="text" name="titulo" id="titulo"><br>
+            <label for="banda">Banda: </label>
+            <input type="text" name="banda" id="banda"><br>
+            <label for="data">Data: </label>
+            <input type="date" name="data" id="data"><br>
+            <label for="local">Local: </label>
+            <input type="text" name="local" id="local"><br>
+            <input type="submit" value="submit">
+        </form>
+        <?php
+        
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $titulo    = $_POST['titulo'];
+            $data_show = $_POST['data'];
+            $endereco  = $_POST['local'];
+            $sql = "INSERT INTO shows (titulo, data_show, endereco) VALUES(:titulo, :data_show, :endereco)";
+
+            try {        //a variavel conexão é do arquivo "conect.php"
+                $stmt = $conexao->prepare($sql); //"->" chama um metodo
+                $stmt->bindParam(":titulo", $titulo); //bindvalues troca a informação
+                $stmt->bindParam(":data_show", $data_show);
+                $stmt->bindParam(":endereco", $endereco);
+
+                $stmt->execute();
+                echo "show inserido com sucesso";
+            } catch (PDOException $e) {
+                echo "erro:" . $e->getMessage();
+            }
+        }
+        ?>
+    </main>
+    <?php // include __DIR__ . '/../includes/footer.php'; ?>
+</body>
+
+</html>
