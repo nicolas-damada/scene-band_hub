@@ -42,6 +42,6 @@ require_once __DIR__ . '/../login/verifica.php';
     <p><?php echo $show['titulo']; ?> - <?php echo $show['endereco']; ?></p>
 <?php endforeach; ?>
     </main>
+    <?php include '../includes/footer.php'; ?>
 </body>
-
 </html>

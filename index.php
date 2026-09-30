@@ -32,5 +32,6 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </ul>
         <?php endif; ?>
     </main>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

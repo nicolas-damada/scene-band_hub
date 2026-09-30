@@ -50,7 +50,7 @@ require_once '../login/verifica.php';
         }
         ?>
     </main>
-    <?php // include __DIR__ . '/../includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>
