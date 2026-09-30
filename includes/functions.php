@@ -1,6 +1,7 @@
 <?php 
 require_once '../database/conect.php';
 function cadastrar_user($conexao, $nome, $email, $senha){
+            $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO usuarios (nome, email, senha) VALUES(:nome, :email, :senha)";
 
@@ -8,7 +9,7 @@ function cadastrar_user($conexao, $nome, $email, $senha){
                 $stmt = $conexao->prepare($sql); //"->" chama um metodo
                 $stmt->bindParam(":nome", $nome);
                 $stmt->bindParam(":email", $email);
-                $stmt->bindParam(":senha", $senha);
+                $stmt->bindParam(":senha", $senhaHash);
                 $stmt->execute();
                 echo "Usuario cadastrado com sucesso";
             } catch (PDOException $e) {
@@ -32,5 +33,12 @@ function consultar_user($conexao, $email){
     }
 }
 
+function buscar_usuario_por_email($conexao, $email) {
+    $sql = "SELECT id, nome, senha, is_admin FROM usuarios WHERE email = :email";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
 
+    return $stmt->fetch(PDO::FETCH_ASSOC); // retorna false se não achar
+}
 ?>
