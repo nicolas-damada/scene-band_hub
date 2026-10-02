@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../includes/functions.php'; ?>
+<?php require_once '../includes/functions.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
