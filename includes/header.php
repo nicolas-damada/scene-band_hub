@@ -6,7 +6,7 @@
     <title>Scena</title>
 </head>
 <body>
-    <header style="background-color: #853953;">
+    <header>
         <nav>
             <a href="../index.php">inicio</a>
             <a href="../app/create.php">Postar show</a>
