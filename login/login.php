@@ -25,6 +25,7 @@
             <input type="reset" value="Limpar">
 
         </form>
+        <a href="cadastrar.php" style="font-size: 15px;">Não tem uma conta? Crie uma aqui</a>
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $usuario = consultar_user($conexao, $_POST['email']);
