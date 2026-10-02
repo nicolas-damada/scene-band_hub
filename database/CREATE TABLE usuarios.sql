@@ -28,3 +28,5 @@ CREATE TABLE shows_bandas (
 );
 
 SELECT * FROM usuarios, shows, bandas;
+
+DROP TA

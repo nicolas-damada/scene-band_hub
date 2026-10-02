@@ -8,6 +8,8 @@ levantamentos de requisitos funcionais(essenciais) e não funcionais(features)
 diagramas das tabelas
 ---
 
+O SCENA é um gerenciador de shows criado para facilitar a divulgação e organização de eventos musicais.
+A proposta é funcionar quase como uma rede social de shows, onde cadastrar um evento seja fácil, direto e intuitivo. O foco não está em criar um sistema complexo, mas sim em oferecer uma plataforma simples para que qualquer pessoa consiga postar, encontrar e acompanhar shows da cena musical.
 
 
 

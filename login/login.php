@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    
 </head>
 
 <body>
@@ -27,8 +28,11 @@
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $usuario = consultar_user($conexao, $_POST['email']);
-            
-            if ($usuario['email'] == $_POST['email'] && $usuario['senha'] == $_POST['senha']) {
+
+            if (
+                $usuario &&
+                password_verify($_POST['senha'], $usuario['senha'])
+            ) {
                 session_start();
                 $_SESSION['id'] = $usuario['id'];
                 header("location: ../index.php");

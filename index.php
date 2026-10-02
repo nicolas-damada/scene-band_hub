@@ -1,20 +1,40 @@
 <?php
 $conexao = include 'database/conect.php';
 
-$sql = "SELECT id, titulo, data_show, endereco FROM shows ORDER BY data_show ASC";
+$sql = "SELECT 
+            s.id,
+            s.titulo,
+            s.data_show,
+            s.endereco,
+            COALESCE(
+                string_agg(sb.nome_banda, ', ' ORDER BY sb.nome_banda),
+                'Sem banda cadastrada'
+            ) AS bandas
+        FROM shows s
+        LEFT JOIN shows_bandas sb
+            ON s.id = sb.show_id
+        GROUP BY s.id, s.titulo, s.data_show, s.endereco
+        ORDER BY s.data_show ASC";
 $stmt = $conexao->query($sql);
 $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCENA</title>
+    <style>
+
+    </style>
 </head>
+
 <body>
-    <?php include 'includes/header.php'?>
+    <header>
+        <?php include 'includes/header.php' ?>
+    </header>
     <main>
         <h1>Eventos adicionados recentemente</h1>
         <?php if (empty($shows)): ?>
@@ -23,9 +43,10 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul>
                 <?php foreach ($shows as $show): ?>
                     <li>
-                        <strong><?php echo htmlspecialchars($show['titulo']); ?></strong>
+                        <strong><?php echo htmlspecialchars($show['titulo']); ?></strong>:
+                        <?php echo htmlspecialchars($show['bandas']); ?>
                         em <?php echo htmlspecialchars($show['endereco']); ?>
-                        (<?php echo htmlspecialchars($show['data_show']); ?>)
+                        (<?php echo date('d/m/Y', strtotime($show['data_show'])); ?>)
                         <hr>
                     </li>
                 <?php endforeach; ?>
@@ -34,4 +55,5 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
     <?php include 'includes/footer.php'; ?>
 </body>
+
 </html>

@@ -39,3 +39,9 @@ entrar:tela de login dos usuários e do admin, caso não esteja cadastrado exist
 
 tela4:
 cadastrar
+---
+paleta de cores: 
+#2C2C2C
+#853953
+#612D53
+#F3F4F4

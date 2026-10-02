@@ -1,6 +1,6 @@
-<?php require_once '../database/conect.php'?>
-<?php require_once '../includes/functions.php'?>
-<?php 
+<?php require_once '../database/conect.php' ?>
+<?php require_once '../includes/functions.php' ?>
+<?php
 require_once '../login/verifica.php';
 ?>
 <!DOCTYPE html>
@@ -29,12 +29,13 @@ require_once '../login/verifica.php';
             <input type="submit" value="submit">
         </form>
         <?php
-        
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titulo    = $_POST['titulo'];
+            $bandas = explode(',', $_POST['banda']);
             $data_show = $_POST['data'];
             $endereco  = $_POST['local'];
-            $sql = "INSERT INTO shows (titulo, data_show, endereco) VALUES(:titulo, :data_show, :endereco)";
+            $sql = "INSERT INTO shows (titulo, data_show, endereco) VALUES(:titulo, :data_show, :endereco) RETURNING id";
 
             try {        //a variavel conexão é do arquivo "conect.php"
                 $stmt = $conexao->prepare($sql); //"->" chama um metodo
@@ -43,6 +44,24 @@ require_once '../login/verifica.php';
                 $stmt->bindParam(":endereco", $endereco);
 
                 $stmt->execute();
+                // Pegar o ID do show cadastrado
+                $show_id = $stmt->fetchColumn();
+
+                // SQL para cadastrar as bandas
+                $sql_bandas = "INSERT INTO shows_bandas
+               (show_id, nome_banda)
+               VALUES (:show_id, :nome_banda)";
+
+                $stmt_bandas = $conexao->prepare($sql_bandas);
+
+                // Cadastrar cada banda
+                foreach (array_unique(array_filter(array_map('trim', $bandas))) as $banda) {
+
+                    $stmt_bandas->execute([
+                        ':show_id' => $show_id,
+                        ':nome_banda' => $banda
+                    ]);
+                }
                 echo "show inserido com sucesso";
             } catch (PDOException $e) {
                 echo "erro:" . $e->getMessage();
