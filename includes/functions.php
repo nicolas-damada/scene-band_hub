@@ -20,7 +20,7 @@ function cadastrar_user($conexao, $nome, $email, $senha){
 
 function consultar_user($conexao, $email){
 
-    $sql = "SELECT id,email,senha FROM usuarios WHERE email = :email";
+    $sql = "SELECT id, email, senha, is_admin FROM usuarios WHERE email = :email";
     try{
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(":email", $email);

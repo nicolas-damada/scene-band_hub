@@ -36,6 +36,7 @@
             ) {
                 session_start();
                 $_SESSION['id'] = $usuario['id'];
+                $_SESSION['is_admin'] = $usuario['is_admin'];
                 header("location: ../index.php");
                 exit();
             } else {

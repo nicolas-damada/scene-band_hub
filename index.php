@@ -1,6 +1,9 @@
 <?php
-$conexao = include 'database/conect.php';
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
+$conexao = include 'database/conect.php';
 $sql = "SELECT 
             s.id,
             s.titulo,
@@ -33,7 +36,7 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <header>
         <?php include 'includes/header.php' ?>
-         
+
     </header>
     <main>
         <img src="images/logo2.png" alt="Logo SCENA" class="logo-index" width="200px">
@@ -48,6 +51,14 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php echo htmlspecialchars($show['bandas']); ?>
                         em <?php echo htmlspecialchars($show['endereco']); ?>
                         (<?php echo date('d/m/Y', strtotime($show['data_show'])); ?>)
+
+                        <?php if (!empty($_SESSION['is_admin'])): ?>
+                            <a href="app/delete.php?id=<?php echo $show['id']; ?>"
+                                onclick="return confirm('Tem certeza que deseja excluir este show?');">
+                                Excluir
+                            </a>
+                        <?php endif; ?>
+
                         <hr>
                     </li>
                 <?php endforeach; ?>
