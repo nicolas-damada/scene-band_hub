@@ -1,5 +1,5 @@
 <?php require_once '../database/conect.php' ?>
-<?php 
+<?php
 require_once __DIR__ . '/../login/verifica.php';
 ?>
 <!DOCTYPE html>
@@ -20,14 +20,22 @@ require_once __DIR__ . '/../login/verifica.php';
             <label for="pesquisa"></label>
             <input type="text" name="pesquisa" id="pesquisa">
         </form>
-        <?php 
+        <?php
         $shows = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $termo    = $_POST['pesquisa'];
-            $sql = "SELECT id, titulo, data_show, endereco
-                    FROM shows
-                    WHERE titulo ILIKE :termo
-                    ORDER BY data_show ASC";
+           $sql = "SELECT 
+            s.id,
+            s.titulo,
+            s.data_show,
+            s.endereco,
+            COALESCE(string_agg(sb.nome_banda, ', '), 'Sem banda cadastrada') AS bandas
+        FROM shows s
+        LEFT JOIN shows_bandas sb
+            ON s.id = sb.show_id
+        WHERE s.titulo ILIKE :termo
+        GROUP BY s.id
+        ORDER BY s.data_show ASC";
             $stmt = $conexao->prepare($sql);
             $termoBusca = "%$termo%";
             $stmt->bindParam(":termo", $termoBusca);
@@ -40,9 +48,15 @@ require_once __DIR__ . '/../login/verifica.php';
 
 
         <?php foreach ($shows as $show): ?>
-    <p><?php echo $show['titulo']; ?> - <?php echo $show['endereco']; ?></p>
-<?php endforeach; ?>
+            <p>
+                <strong><?php echo htmlspecialchars($show['titulo']); ?></strong>:
+                <?php echo htmlspecialchars($show['bandas']); ?>
+                em <?php echo htmlspecialchars($show['endereco']); ?>
+                (<?php echo date('d/m/Y', strtotime($show['data_show'])); ?>)
+            </p>
+        <?php endforeach; ?>
     </main>
     <?php include '../includes/footer.php'; ?>
 </body>
+
 </html>

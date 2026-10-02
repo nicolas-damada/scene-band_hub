@@ -33,9 +33,11 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <header>
         <?php include 'includes/header.php' ?>
+         
     </header>
     <main>
-        <h1>Eventos adicionados recentemente</h1>
+        <img src="images/logo2.png" alt="Logo SCENA" class="logo-index" width="200px">
+        <h1>Shows adicionados recentemente</h1>
         <?php if (empty($shows)): ?>
             <p>Nenhum show cadastrado ainda.</p>
         <?php else: ?>
