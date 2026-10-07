@@ -5,6 +5,7 @@
         <div class="menu">
             <a href="/scena/app/create.php">Postar show</a>
             <a href="/scena/app/search.php">Pesquisar</a>
+            <a href="/scena/app/quem_somos.php">Quem somos</a>
             <a href="/scena/login/login.php">Entrar</a>
             <a href="/scena/login/logout.php">Sair</a>
         </div>
