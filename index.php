@@ -29,8 +29,8 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCENA</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="images\favicon-16x16.png">
+    <link rel="stylesheet" href="/scena/css/style.css">
 </head>
 
 <body>
@@ -39,7 +39,6 @@ $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </header>
     <main>
-        <img src="images/logo2.png" alt="Logo SCENA" class="logo-index" width="200px">
         <h1>Shows adicionados recentemente</h1>
         <?php if (empty($shows)): ?>
             <p>Nenhum show cadastrado ainda.</p>

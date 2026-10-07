@@ -1,11 +1,11 @@
-<?php require_once '../includes/functions.php'; ?>
+<?php require_once __DIR__ . '/../includes/functions.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>scena - Login</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
@@ -37,7 +37,7 @@
                 session_start();
                 $_SESSION['id'] = $usuario['id'];
                 $_SESSION['is_admin'] = $usuario['is_admin'];
-                header("location: ../index.php");
+                header("location: /scena/index.php");
                 exit();
             } else {
                 echo "Usuario ou senha invalidos";
@@ -45,7 +45,7 @@
         }
         ?>
     </main>
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 
 </html>

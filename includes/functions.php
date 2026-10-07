@@ -1,5 +1,5 @@
 <?php 
-require_once '../database/conect.php';
+require_once __DIR__ . '/../database/conect.php';
 function cadastrar_user($conexao, $nome, $email, $senha){
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 

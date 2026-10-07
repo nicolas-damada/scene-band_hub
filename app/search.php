@@ -1,9 +1,8 @@
-<?php require_once '../database/conect.php' ?>
-<?php
+<?php require_once  __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verifica.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -13,7 +12,7 @@ require_once __DIR__ . '/../login/verifica.php';
 </head>
 
 <body>
-    <?php include '../includes/header.php' ?>
+    <?php include __DIR__ . '/../includes/header.php' ?>
     <main>
         <h1>pesquise pelo titulo</h1>
         <form action="" method="post">
@@ -56,7 +55,7 @@ require_once __DIR__ . '/../login/verifica.php';
             </p>
         <?php endforeach; ?>
     </main>
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 
 </html>

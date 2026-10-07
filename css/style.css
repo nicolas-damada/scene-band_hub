@@ -1,3 +1,5 @@
+/* css/style.css */
+
 * {
     box-sizing: border-box;
 }
@@ -5,48 +7,257 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-size: 16px;
+    line-height: 1.5;
+    background: #fff;
+    color: #27292d;
+}
+
+/* Cabeçalho */
+header {
+    border-bottom: 1px solid #e8eaee;
+}
+
+nav {
+    max-width: 1080px;
+    margin: auto;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.marca {
+    font-size: 32px;
     color: #111;
+    text-decoration: none;
+    letter-spacing: 1px;
 }
 
-header,
-footer {
-    text-align: center;
-    padding: 20px;
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
+.menu a {
+    color: #59616e;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+/* Conteúdo de todas as páginas */
 main {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    text-align: center;
+    max-width: 1080px;
+    margin: 48px auto;
+    padding: 0 24px;
+    text-align: left;
 }
 
+h1 {
+    margin: 0 0 30px;
+    font-size: 32px;
+    line-height: 1.25;
+}
+
+/* Formulários */
 form {
+    max-width: 520px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 10px;
+    margin-bottom: 24px;
 }
 
-input {
-    width: 300px;
-    max-width: 90%;
-    padding: 8px;
+form br {
+    display: none;
 }
 
+label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input,
+textarea,
+select,
+button {
+    font: inherit;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #cbd0d8;
+    border-radius: 6px;
+    background: #f6f7f8;
+    color: #27292d;
+}
+
+button,
 input[type="submit"],
 input[type="reset"] {
     width: auto;
-    padding: 8px 16px;
+    align-self: flex-start;
+    padding: 10px 18px;
+    border: 1px solid #27292d;
+    border-radius: 6px;
+    background: #27292d;
+    color: #fff;
     cursor: pointer;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
+input[type="reset"] {
+    background: #fff;
+    color: #27292d;
 }
 
-li {
-    margin-bottom: 15px;
+input[type="checkbox"],
+input[type="radio"] {
+    width: auto;
+    align-self: flex-start;
+}
+
+:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+}
+
+/* Busca */
+.busca {
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.busca input {
+    flex: 1;
+    padding: 16px 18px;
+    border-color: #f6f7f8;
+    border-radius: 10px;
+}
+
+.busca button {
+    align-self: auto;
+    padding: 12px 0;
+    border: 0;
+    background: transparent;
+    color: #59616e;
+}
+
+.quantidade {
+    margin: 0 0 18px;
+    font-size: 14px;
+    color: #737b88;
+}
+
+/* Feed */
+.lista-shows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #e8eaee;
+}
+
+.show {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 30px 0;
+    border-bottom: 1px solid #e8eaee;
+}
+
+.show-data {
+    flex: 0 0 64px;
+    text-align: center;
+}
+
+.show-data span {
+    display: block;
+}
+
+.show-mes {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #c43d18;
+}
+
+.show-dia {
+    margin: 4px 0;
+    font-size: 32px;
+    line-height: 1.15;
+    color: #48515d;
+}
+
+.show-ano {
+    font-size: 12px;
+    color: #737b88;
+}
+
+.show-info {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.show-info h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.show-info p {
+    margin: 6px 0 0;
+    color: #59616e;
+}
+
+footer {
+    padding: 24px;
+    border-top: 1px solid #e8eaee;
+    text-align: center;
+    font-size: 14px;
+    color: #737b88;
+}
+
+/* Celular */
+@media (max-width: 600px) {
+    nav {
+        padding: 20px;
+    }
+
+    .menu {
+        gap: 16px;
+    }
+
+    main {
+        margin: 32px auto;
+        padding: 0 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .show {
+        gap: 16px;
+        padding: 24px 0;
+    }
+
+    .show-data {
+        flex-basis: 48px;
+    }
+
+    .show-info h2 {
+        font-size: 20px;
+    }
 }

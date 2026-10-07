@@ -1,5 +1,5 @@
 <?php
-require_once '../database/conect.php';
+require_once __DIR__ . '/../database/conect.php';
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -34,7 +34,7 @@ try {
         ':id' => $id
     ]);
 
-    header("Location: ../index.php");
+    header("Location: /scena/index.php");
     exit();
 
 } catch (PDOException $e) {

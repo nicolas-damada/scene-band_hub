@@ -5,7 +5,7 @@ if(session_status() == PHP_SESSION_NONE){
 $_SESSION = array();
 session_destroy();
 
-header("Location: ../index.php");
+header("Location: /scena/index.php");
 exit();
 
 ?>

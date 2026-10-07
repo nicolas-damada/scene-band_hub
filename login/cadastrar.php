@@ -1,5 +1,5 @@
-<?php require_once '../database/conect.php';?>
-<?php require_once '../includes/functions.php';?>
+<?php require_once __DIR__ . '../database/conect.php';?>
+<?php require_once __DIR__ . '../includes/functions.php';?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -32,13 +32,13 @@
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             cadastrar_user($conexao, $_POST['nome'], $_POST['email'],$_POST['senha']);
-            header("location: ../index.php");
+            header("location: scena/index.php");
             exit();
             
         }
         ?>
     </main>
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 
 </html>
