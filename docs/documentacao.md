@@ -182,24 +182,5 @@ O cabeçalho atual oferece acesso ao início pela marca SCENA e os links **Posta
 6. Ao excluir um show, suas participações em `shows_bandas` também são removidas pelo banco.
 7. O e-mail deve ser único no modelo atual, e as senhas cadastradas pela aplicação são armazenadas como hash e verificadas no login.
 
-## 8. Paleta de cores
 
-Paleta proposta no rascunho para a identidade visual do SCENA:
 
-| Cor | Nome aproximado | Aplicação sugerida |
-| --- | --- | --- |
-| `#2C2C2C` | Cinza escuro | Textos e elementos de contraste. |
-| `#853953` | Vinho | Botões e destaques principais. |
-| `#612D53` | Roxo escuro | Destaques secundários e estados de interação. |
-| `#F3F4F4` | Cinza claro | Fundos e áreas de leitura. |
-
-Essas aplicações são sugestões de design. O CSS atual utiliza principalmente tons neutros e ainda não aplica integralmente a paleta proposta.
-
-## 9. Pendências identificadas
-
-- Incluir a definição de `is_admin` no esquema SQL para compatibilizar autenticação e permissões com o código.
-- Vincular o usuário autenticado ao campo `usuario_id` durante a publicação de shows.
-- Validar a presença de ao menos uma banda no cadastro do evento.
-- Definir a prioridade das evoluções do rascunho: atualização de conta e filtros por cidade, artista ou gênero.
-- Alinhar o texto do feed à ordenação por data do show ou implementar o registro da data de publicação para listar eventos adicionados recentemente.
-- Aplicar a paleta proposta, caso ela seja mantida como identidade visual do projeto.
