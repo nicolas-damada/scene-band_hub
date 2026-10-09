@@ -16,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
             
             <?php if (isset($_SESSION['id'])): ?>
                 <a href="/scena/login/logout.php">Sair</a>
-            <?php elseif (!isset($_SESSION['usuario_id'])): ?>
+            <?php elseif (!isset($_SESSION['id'])): ?>
                 <a href="/scena/login/login.php">Entrar</a>
             <?php endif;?>
             
