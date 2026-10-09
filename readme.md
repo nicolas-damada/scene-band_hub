@@ -25,9 +25,20 @@ O sistema funciona como uma rede social focada em eventos musicais: os usuários
 - Cadastro de usuários.
 - Login e logout.
 - Cadastro de shows com múltiplas bandas por evento.
-- Feed de shows cadastrados.
-- Pesquisa de shows.
+- Feed público de shows cadastrados, ordenado pela data do evento.
+- Pesquisa de shows por título, disponível para usuários autenticados.
 - Exclusão de shows restrita ao administrador.
+
+### Estado atual da implementação
+
+As funcionalidades acima descrevem o escopo do projeto. Os fluxos de cadastro e autenticação ainda possuem erros de execução:
+
+- O cadastro de usuários possui caminhos inválidos nos `require_once` e um redirecionamento incorreto.
+- O login inicia a sessão e redireciona depois de gerar HTML; sem buffer de saída, essas operações falham.
+- A publicação de shows ainda não utiliza transação, não valida os campos no servidor e não preenche `usuario_id`. Uma falha ao inserir bandas pode deixar o evento parcialmente salvo.
+- A exclusão verifica a permissão administrativa no servidor, mas é acionada por GET e ainda não possui proteção contra CSRF.
+
+O feed também inclui eventos passados e, apesar do título da página, não ordena por data de publicação. Essas pendências precisam ser resolvidas para considerar os fluxos completos validados.
 
 ---
 
@@ -40,16 +51,16 @@ O sistema funciona como uma rede social focada em eventos musicais: os usuários
 - Git, caso o projeto seja obtido por clonagem.
 - Navegador web.
 
-Os comandos abaixo usam marcadores para o endereço do repositório, a pasta local e o arquivo SQL. Substitua esses valores pelos nomes utilizados na versão final do projeto.
+Os comandos abaixo partem de uma instalação nova e utilizam `scena` como nome da pasta do projeto e do banco. A pasta precisa ter esse nome porque os links e redirecionamentos atuais utilizam o prefixo `/scena/`.
 
 ### 1. Obter o projeto
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
-cd <PASTA_DO_PROJETO>
+git clone https://github.com/nicolas-damada/scene-band_hub.git scena
+cd scena
 ```
 
-Também é possível baixar o projeto como ZIP e extrair os arquivos.
+Também é possível baixar o projeto como ZIP e extrair os arquivos em uma pasta chamada `scena`.
 
 ### 2. Criar o banco de dados
 
@@ -59,19 +70,27 @@ Crie um banco no PostgreSQL. Neste exemplo, o nome utilizado é `scena`:
 psql -U postgres -c "CREATE DATABASE scena;"
 ```
 
-Importe o script SQL que contém a estrutura final do banco. Para um arquivo SQL em texto:
+Na pasta do projeto, importe o [script oficial de criação das tabelas](database/tabelas%20atuais.sql) em um banco vazio:
 
 ```bash
-psql -U postgres -d scena -f <CAMINHO_DO_ARQUIVO_SQL>
+psql -U postgres -d scena -v ON_ERROR_STOP=1 -f "database/tabelas atuais.sql"
 ```
 
-Se o banco já estiver criado e configurado, utilize-o sem repetir a criação.
+Esse script já cria `usuarios.is_admin` como `BOOLEAN NOT NULL DEFAULT FALSE`. Ele não é uma migração para bancos existentes; se o banco já estiver configurado, confira a estrutura antes de executar qualquer script de criação.
+
+Opcionalmente, em um banco de desenvolvimento, carregue os dados de exemplo uma única vez:
+
+```bash
+psql -U postgres -d scena -v ON_ERROR_STOP=1 -f database/dados_teste.sql
+```
+
+O script cria a conta `teste@scena.com`, com senha `ScenaTeste123!`, sem permissão administrativa, e um show com três bandas. Consulte [database/README.md](database/README.md) para os detalhes dos scripts.
 
 ### 3. Configurar a conexão
 
-No arquivo responsável pela conexão PDO, configure o host, a porta, o nome do banco, o usuário e a senha conforme seu ambiente.
+Em [database/conect.php](database/conect.php), ajuste `$host`, `$dbname`, `$user` e `$pass` conforme seu ambiente. A configuração atual aponta para um servidor da rede local; para um PostgreSQL instalado na mesma máquina, utilize `localhost`. A porta padrão é `5432`; se necessário, inclua outra porta no DSN.
 
-Exemplo de conexão, caso seja necessário adaptar a configuração existente:
+Exemplo de conexão compatível com a variável utilizada pela aplicação e com o retorno esperado por `index.php`:
 
 ```php
 <?php
@@ -80,31 +99,35 @@ $host = 'localhost';
 $port = '5432';
 $dbname = 'scena';
 $user = 'postgres';
-$password = 'sua_senha';
+$pass = 'sua_senha';
 
-$pdo = new PDO(
+$conexao = new PDO(
     "pgsql:host=$host;port=$port;dbname=$dbname",
     $user,
-    $password,
+    $pass,
     [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
+
+return $conexao;
 ```
 
-Mantenha o nome da variável de conexão utilizado pelo restante do projeto.
+Use uma conta do PostgreSQL com acesso às tabelas do banco configurado. As contas cadastradas na tabela `usuarios` são contas da aplicação, distintas do usuário da conexão PDO.
 
 ### 4. Iniciar a aplicação
 
-Na pasta que contém a página de entrada do projeto, execute:
+Dentro da pasta `scena`, execute o servidor usando a pasta pai como raiz pública, para preservar o prefixo `/scena/` esperado pelo código:
 
 ```bash
-php -S localhost:8000
+php -S localhost:8000 -t ..
 ```
 
-Acesse [http://localhost:8000](http://localhost:8000) no navegador.
+Acesse [http://localhost:8000/scena/index.php](http://localhost:8000/scena/index.php) no navegador.
 
 ### 5. Acessar o sistema
 
-Crie uma conta pela página de cadastro e entre com suas credenciais. Para utilizar a exclusão de shows, a conta deve possuir o campo `is_admin` definido como `true` no banco de dados.
+O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais; atualmente, ele depende das correções de cadastro e login descritas em **Estado atual da implementação**. O cadastro não autentica automaticamente o usuário.
+
+Para utilizar a exclusão de shows, a conta deve possuir `is_admin = TRUE`, atribuído pela gestão do sistema no banco de dados. O cadastro comum utiliza o padrão `FALSE` e não oferece essa opção.
 
 ---
 
@@ -132,6 +155,7 @@ Facilitar a divulgação de eventos musicais e dar mais visibilidade às bandas 
 
 | Perfil | Responsabilidade e acesso |
 | --- | --- |
+| Visitante | Consultar o feed público e acessar as telas de login e cadastro. |
 | Usuário cadastrado | Acessar sua conta e publicar shows, além de consultar os eventos. |
 | Administrador | Utilizar as funções do usuário e excluir shows. |
 
@@ -144,6 +168,7 @@ Facilitar a divulgação de eventos musicais e dar mais visibilidade às bandas 
 | Login | Autenticar o usuário. |
 | Cadastro de usuário | Criar uma conta. |
 | Cadastro de show | Informar os dados do evento e suas bandas. |
+| Quem somos | Apresentar a proposta e o público do SCENA. |
 
 ## 3. Requisitos do Sistema
 
@@ -192,54 +217,60 @@ Os requisitos abaixo descrevem o comportamento esperado da aplicação e os crit
 
 ## 4. Organização dos Dados
 
-Esta seção apresenta um **modelo conceitual** das informações do SCENA. Os nomes exatos das colunas, tipos, restrições e da tabela associativa devem seguir o script SQL da versão final do projeto.
+Esta seção descreve o modelo atual definido em [database/tabelas atuais.sql](database/tabelas%20atuais.sql). Os nomes das bandas são armazenados diretamente em `shows_bandas`; não existe uma tabela independente `bandas`.
 
-### 4.1 Dicionário Conceitual de Dados
+### 4.1 Dicionário de Dados
 
-| Entidade | Informação | Finalidade |
-| --- | --- | --- |
-| Usuário | Identificador | Distinguir cada conta. |
-| Usuário | Nome e e-mail | Identificar o usuário e seu acesso. |
-| Usuário | Senha armazenada | Permitir a validação das credenciais. |
-| Usuário | `is_admin` | Indicar se a conta possui acesso administrativo. |
-| Show | Identificador | Distinguir cada evento. |
-| Show | Título | Apresentar o nome do evento. |
-| Show | Data e horário | Informar quando o evento ocorre. |
-| Show | Localização | Informar onde o evento ocorre. |
-| Show | Descrição | Apresentar informações complementares. |
-| Banda | Identificador | Distinguir cada banda. |
-| Banda | Nome | Identificar a atração musical. |
-| Associação show–banda | Referência ao show | Identificar o evento relacionado. |
-| Associação show–banda | Referência à banda | Identificar a banda participante. |
+| Tabela | Campo | Tipo e restrições | Finalidade |
+| --- | --- | --- | --- |
+| `usuarios` | `id` | `SERIAL`, chave primária | Identificar a conta. |
+| `usuarios` | `nome` | `VARCHAR(50) NOT NULL` | Nome do usuário. |
+| `usuarios` | `email` | `VARCHAR(255) NOT NULL UNIQUE` | E-mail de acesso. |
+| `usuarios` | `senha` | `VARCHAR(255) NOT NULL` | Hash da senha. |
+| `usuarios` | `is_admin` | `BOOLEAN NOT NULL DEFAULT FALSE` | Indicar a permissão administrativa. |
+| `shows` | `id` | `SERIAL`, chave primária | Identificar o evento. |
+| `shows` | `titulo` | `VARCHAR(255) NOT NULL` | Nome do evento. |
+| `shows` | `data_show` | `DATE NOT NULL` | Data do evento, sem horário. |
+| `shows` | `endereco` | `VARCHAR(255) NOT NULL` | Local ou endereço do evento. |
+| `shows` | `usuario_id` | `INT`, chave estrangeira, aceita nulo | Referência ao autor; ainda não preenchida pela publicação. |
+| `shows_bandas` | `show_id` | `INT NOT NULL`, chave estrangeira | Referência ao show. |
+| `shows_bandas` | `nome_banda` | `VARCHAR(255) NOT NULL` | Nome de uma banda participante. |
+
+A chave primária de `shows_bandas` é composta por `show_id` e `nome_banda`. Horário, descrição, cidade e gênero não possuem campos específicos no modelo atual; sua inclusão seria uma evolução futura.
 
 ### 4.2 Relacionamentos
 
-Shows e bandas possuem uma relação de **muitos para muitos**: um show pode reunir várias bandas, e uma banda pode participar de vários shows. Uma associação entre essas entidades representa cada participação.
+- Um usuário pode estar associado a vários shows; cada show pode ter um usuário responsável. A exclusão do usuário define `usuario_id` como nulo (`ON DELETE SET NULL`).
+- Um show possui vários registros em `shows_bandas`. A exclusão do show remove suas participações (`ON DELETE CASCADE`).
+- O mesmo nome de banda pode aparecer em diferentes shows, mas não há um identificador compartilhado nem um cadastro independente de bandas. A chave composta impede repetir exatamente o mesmo nome no mesmo show.
 
 ## 5. Diagramas
 
-### 5.1 Modelo Conceitual de Entidade-Relacionamento
+### 5.1 Modelo Atual de Entidade-Relacionamento
 
-Os nomes abaixo representam entidades lógicas, sem definir os nomes físicos das tabelas.
+O diagrama representa as tabelas atuais. Em `shows_bandas`, os dois campos formam a chave primária composta.
 
 ```mermaid
 erDiagram
-    SHOW ||--o{ PARTICIPACAO : possui
-    BANDA ||--o{ PARTICIPACAO : integra
-    SHOW {
-        int identificador PK
-        string titulo
-        datetime data_hora
-        string localizacao
-        string descricao
-    }
-    BANDA {
-        int identificador PK
+    usuarios |o--o{ shows : publica
+    shows ||--o{ shows_bandas : possui
+    usuarios {
+        int id PK
         string nome
+        string email UK
+        string senha
+        boolean is_admin
     }
-    PARTICIPACAO {
-        int referencia_show FK
-        int referencia_banda FK
+    shows {
+        int id PK
+        string titulo
+        date data_show
+        string endereco
+        int usuario_id FK
+    }
+    shows_bandas {
+        int show_id PK, FK
+        string nome_banda PK
     }
 ```
 
@@ -257,6 +288,8 @@ flowchart TD
 ```
 
 ### 5.3 Fluxo de Publicação de um Show
+
+Este é o fluxo esperado. A validação no servidor e a gravação de show e bandas em uma única transação ainda estão pendentes na implementação.
 
 ```mermaid
 flowchart TD

@@ -24,7 +24,7 @@ require_once __DIR__ . '/../login/verifica.php';
         $shows = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $termo    = $_POST['pesquisa'];
-           $sql = "SELECT 
+            $sql = "SELECT 
             s.id,
             s.titulo,
             s.data_show,
@@ -46,15 +46,22 @@ require_once __DIR__ . '/../login/verifica.php';
 
 
 
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'):
+            if (!empty($shows)): ?>
 
-        <?php foreach ($shows as $show): ?>
-            <p>
-                <strong><?php echo htmlspecialchars($show['titulo']); ?></strong>:
-                <?php echo htmlspecialchars($show['bandas']); ?>
-                em <?php echo htmlspecialchars($show['endereco']); ?>
-                (<?php echo date('d/m/Y', strtotime($show['data_show'])); ?>)
-            </p>
-        <?php endforeach; ?>
+                <?php foreach ($shows as $show): ?>
+                    <p>
+                        <strong><?php echo htmlspecialchars($show['titulo']); ?></strong>:
+                        <?php echo htmlspecialchars($show['bandas']); ?>
+                        em <?php echo htmlspecialchars($show['endereco']); ?>
+                        (<?php echo date('d/m/Y', strtotime($show['data_show'])); ?>)
+                    </p>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Não há registro</p>
+            <?php endif; ?>
+        <?php endif;?>
     </main>
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
