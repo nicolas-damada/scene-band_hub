@@ -19,13 +19,13 @@ require_once __DIR__ . '/../login/verifica.php';
         <h1>Cadastro de Show: </h1>
         <form action="" method="post">
             <label for="titulo">Titulo: </label>
-            <input type="text" name="titulo" id="titulo"><br>
+            <input type="text" name="titulo" id="titulo" required><br>
             <label for="banda">Banda: </label>
-            <input type="text" name="banda" id="banda"><br>
+            <input type="text" name="banda" id="banda" required><br>
             <label for="data">Data: </label>
-            <input type="date" name="data" id="data"><br>
+            <input type="date" name="data" id="data" required><br>
             <label for="local">Local: </label>
-            <input type="text" name="local" id="local"><br>
+            <input type="text" name="local" id="local" required><br>
             <input type="submit" value="submit">
         </form>
         <?php
