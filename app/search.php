@@ -47,7 +47,7 @@ require_once __DIR__ . '/../login/verifica.php';
 
 
         <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST'):
+        if ($_SERVER['REQUEST_METHOD'] === 'POST')://verifica se algo foi enviado via POST, caso sim, verifica se $shows NÂO está vazio, caso sim, executa o foreach
             if (!empty($shows)): ?>
 
                 <?php foreach ($shows as $show): ?>
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../login/verifica.php';
             <?php endif; ?>
         <?php endif;?>
     </main>
-    <?php include __DIR__ . '/../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; //inclui o footer ?>
 </body>
 
 </html>

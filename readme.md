@@ -6,6 +6,8 @@ O sistema funciona como uma rede social focada em eventos musicais: os usuários
 
 ## Princípios do Projeto
 
+O planejamento de entregas está no [Product Backlog](docs/product_backlog.md), com prioridades, histórias de usuário, critérios de aceite e evolução do MVP.
+
 - **Simplicidade:** formulários diretos e informações fáceis de entender.
 - **Foco:** divulgação de shows, bandas, locais e datas.
 - **Velocidade:** poucos passos entre cadastrar um evento e divulgá-lo.

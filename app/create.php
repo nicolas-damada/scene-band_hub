@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../includes/functions.php';
+<?php require_once __DIR__ . '/../includes/functions.php';//requere o funtions e o verificador de sessao
 require_once __DIR__ . '/../login/verifica.php';
 ?>
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ require_once __DIR__ . '/../login/verifica.php';
 
 <body>
 
-    <?php include __DIR__ . '/../includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php';//inclui o header ?> 
     <main>
         <h1>Cadastro de Show: </h1>
         <form action="" method="post">
