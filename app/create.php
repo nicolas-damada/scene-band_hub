@@ -26,7 +26,7 @@ require_once __DIR__ . '/../login/verifica.php';
             <input type="date" name="data" id="data" required><br>
             <label for="local">Local: </label>
             <input type="text" name="local" id="local" required><br>
-            <input type="submit" value="submit">
+            <input type="submit" value="Postar">
         </form>
         <?php
 
